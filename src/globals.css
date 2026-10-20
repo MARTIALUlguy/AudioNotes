@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Styles personnalisés */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-success text-primary rounded-lg font-medium hover:bg-blue-400 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-surface text-white rounded-lg font-medium hover:bg-primary-light transition-colors border border-accent;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-error text-white rounded-lg font-medium hover:bg-red-600 transition-colors;
+  }
+
+  .card {
+    @apply bg-surface text-white rounded-lg p-6 shadow-lg border-l-4 border-accent-light;
+  }
+
+  .input-base {
+    @apply px-4 py-2 bg-primary-light text-white rounded-lg border border-accent focus:outline-none focus:ring-2 focus:ring-success transition-colors;
+  }
+}
+
+/* Variables CSS personnalisées */
+:root {
+  color-scheme: dark;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1419;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #16213e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0f3460;
+}
+
+/* Firefox */
+* {
+  scrollbar-color: #16213e #0f1419;
+  scrollbar-width: thin;
+}
+
+/* Animations additionnelles */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}

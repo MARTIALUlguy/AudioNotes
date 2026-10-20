@@ -10,7 +10,7 @@ function jsonResponse(body: { error: string } | { text: string }, status = 200):
 }
 
 export async function POST(request: Request): Promise<Response> {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return jsonResponse({ error: 'Le service de transcription n’est pas configuré.' }, 500)
   }
 
@@ -42,21 +42,24 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    const client = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY,
+      baseURL: 'https://api.groq.com/openai/v1',
+    })
     const audioFile = await toFile(await audio.arrayBuffer(), audio.name, {
       type: audio.type.split(';')[0],
     })
     const result = await client.audio.transcriptions.create({
       file: audioFile,
-      model: 'gpt-4o-mini-transcribe',
+      model: 'whisper-large-v3-turbo',
       language: 'fr',
     })
 
     return jsonResponse({ text: result.text })
   } catch (cause) {
-    console.error('OpenAI transcription request failed:', cause)
+    console.error('Groq transcription request failed:', cause)
     return jsonResponse(
-      { error: 'La transcription a échoué. Vérifie la clé API, le quota et réessaie.' },
+      { error: 'La transcription a échoué. Vérifie la clé Groq, le quota et réessaie.' },
       502,
     )
   }

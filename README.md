@@ -1,6 +1,6 @@
 # AudioNote
 
-AudioNote est une application web progressive (PWA) qui enregistre des notes vocales, conserve les fichiers localement et les transcrit en français avec l’API OpenAI. L’audio reste dans le navigateur; il est transmis au serveur Vercel uniquement pour demander sa transcription.
+AudioNote est une application web progressive (PWA) qui enregistre des notes vocales, conserve les fichiers localement et les transcrit en français avec Groq (`whisper-large-v3-turbo`). L’audio reste dans le navigateur; il est transmis au serveur Vercel, qui appelle Groq pour demander sa transcription.
 
 ## Fonctionnalités
 
@@ -15,7 +15,7 @@ AudioNote est une application web progressive (PWA) qui enregistre des notes voc
 - Node.js 20 ou une version plus récente.
 - npm.
 - Un compte Vercel pour l’hébergement.
-- Une clé API OpenAI avec accès au modèle `gpt-4o-mini-transcribe` et une facturation API active.
+- Une clé API Groq créée dans [Groq Console](https://console.groq.com/keys).
 
 ## Développement local
 
@@ -30,7 +30,7 @@ Configurer la clé API côté serveur dans Vercel :
 ```bash
 npx vercel login
 npx vercel link
-npx vercel env add OPENAI_API_KEY development
+npx vercel env add GROQ_API_KEY development
 ```
 
 Saisir la clé dans l’invite, sans la préfixer par `VITE_`. Pour lancer le frontend et la fonction API Vercel ensemble :
@@ -45,7 +45,7 @@ Ne lance pas le projet avec `npm run dev` pour tester la transcription : le serv
 
 Le projet doit être lié à un dépôt Git pour le déploiement continu, ou déployé depuis le terminal avec la CLI Vercel.
 
-1. Ajoute `OPENAI_API_KEY` dans **Vercel → Project → Settings → Environment Variables**. Coche les environnements nécessaires (Production et Preview). Cette variable est secrète et ne doit jamais commencer par `VITE_`.
+1. Ajoute `GROQ_API_KEY` dans **Vercel → Project → Settings → Environment Variables**. Coche les environnements nécessaires (Production et Preview). Cette variable est secrète et ne doit jamais commencer par `VITE_`.
 2. Déploie depuis le projet lié :
 
    ```bash
@@ -56,16 +56,16 @@ Vercel détecte Vite. La commande de build est `npm run build`, le dossier de so
 
 HTTPS est nécessaire pour l’accès au microphone. Si tu modifies la clé API dans Vercel, redéploie le projet.
 
-L’endpoint de transcription est public sur le déploiement. Pour éviter un usage abusif de la clé API et des coûts inattendus, active une limite de requêtes sur `/api/transcribe` dans les protections Vercel, et garde un plafond de dépenses côté OpenAI.
+L’endpoint de transcription est public sur le déploiement. Pour éviter un usage abusif de la clé API, active une limite de requêtes sur `/api/transcribe` dans les protections Vercel et surveille les limites de compte et les quotas Groq.
 
 ## Limite de taille
 
-La fonction limite les fichiers audio à **4 Mo**, pour rester sous la limite de requête des fonctions Vercel. Les audios plus longs restent enregistrés localement et peuvent être lus ou téléchargés, mais l’application ne les découpe pas : fais un nouvel enregistrement plus court pour le transcrire. La clé OpenAI n’est utilisée que par la fonction serveur et n’est jamais envoyée au navigateur.
+La fonction limite les fichiers audio à **4 Mo**, pour rester sous la limite de requête des fonctions Vercel. Les audios plus longs restent enregistrés localement et peuvent être lus ou téléchargés, mais l’application ne les découpe pas : fais un nouvel enregistrement plus court pour le transcrire. La clé Groq n’est utilisée que par la fonction serveur et n’est jamais envoyée au navigateur.
 
 ## Structure utile
 
 ```text
-api/transcribe.ts          Fonction Vercel qui appelle OpenAI
+api/transcribe.ts          Fonction Vercel qui appelle Groq
 src/api/transcribe.ts      Client de l’API de transcription
 src/components/            Enregistreur et historique
 src/db/audioDb.ts          Stockage IndexedDB local

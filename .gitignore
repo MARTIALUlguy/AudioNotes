@@ -27,6 +27,8 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+/audionote-492212-637d1b8a20c7.json
+/codes/audionote-492212-637d1b8a20c7.json
 
 # Build output
 /build
@@ -41,3 +43,4 @@ dist-ssr
 # OS
 .DS_Store
 Thumbs.db
+.vercel

@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+audionote-492212-637d1b8a20c7.json
+codes/audionote-492212-637d1b8a20c7.json
+node_modules
+dist

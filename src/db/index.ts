@@ -5,7 +5,7 @@ export {
   getRecordingsByStatus,
   getRecording,
   updateRecordingStatus,
-  updateRecordingResult,
+  updateRecordingTranscript,
   deleteRecording,
   deleteAllRecordings,
   countRecordings,

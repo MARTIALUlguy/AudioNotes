@@ -30,7 +30,7 @@ export default defineConfig({
       manifest: {
         name: 'AudioNote',
         short_name: 'AudioNote',
-        description: 'Application d\'enregistrement audio PWA',
+        description: 'Enregistre et transcris tes notes vocales avec AudioNote.',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',
@@ -76,15 +76,6 @@ export default defineConfig({
           }
         ],
         categories: ['productivity', 'utilities'],
-        shortcuts: [
-          {
-            name: 'Nouvel enregistrement',
-            short_name: 'Enregistrer',
-            description: 'Démarrer un nouvel enregistrement audio',
-            url: '/?mode=record',
-            icons: [{ src: '/icon-192.png', sizes: '192x192' }]
-          }
-        ]
       },
       devOptions: {
         enabled: true,

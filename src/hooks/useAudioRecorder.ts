@@ -5,6 +5,7 @@ export interface Recording {
   blob: Blob
   mimeType: string
   createdAt: Date
+  duration: number
 }
 
 export function useAudioRecorder() {
@@ -199,6 +200,7 @@ export function useAudioRecorder() {
               blob,
               mimeType,
               createdAt: new Date(),
+              duration,
             }
 
             // Réinitialiser l'état
@@ -222,7 +224,7 @@ export function useAudioRecorder() {
         return null
       }
     },
-    [getMimeType],
+    [getMimeType, duration],
   )
 
   /**

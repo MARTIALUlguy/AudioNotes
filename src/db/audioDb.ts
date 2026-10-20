@@ -10,7 +10,6 @@ export interface AudioRecording {
   createdAt: Date
   duration: number
   status: 'pending' | 'syncing' | 'synced' | 'error'
-  summary: string | null
   transcript: string | null
 }
 
@@ -138,14 +137,11 @@ export async function updateRecordingStatus(
 }
 
 /**
- * Met à jour le résumé et la transcription d'un enregistrement
+ * Met à jour la transcription d'un enregistrement
  */
-export async function updateRecordingResult(
+export async function updateRecordingTranscript(
   id: string,
-  result: {
-    summary?: string | null
-    transcript?: string | null
-  }
+  transcript: string,
 ): Promise<void> {
   try {
     const database = await getDB()
@@ -155,17 +151,10 @@ export async function updateRecordingResult(
       throw new Error(`Enregistrement ${id} non trouvé`)
     }
 
-    if (result.summary !== undefined) {
-      recording.summary = result.summary
-    }
-
-    if (result.transcript !== undefined) {
-      recording.transcript = result.transcript
-    }
-
+    recording.transcript = transcript
     await database.put(STORE_NAME, recording)
   } catch (error) {
-    console.error('❌ Erreur lors de la mise à jour des résultats:', error)
+    console.error('❌ Erreur lors de la mise à jour de la transcription:', error)
     throw error
   }
 }

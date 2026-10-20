@@ -1,8 +1,7 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
+  "functions": {
+    "api/transcribe.ts": {
+      "maxDuration": 60
     }
-  ]
+  }
 }

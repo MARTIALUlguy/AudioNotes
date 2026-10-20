@@ -3,10 +3,14 @@ import { useAudioRecorder } from '../hooks/useAudioRecorder'
 import type { Recording } from '../hooks/useAudioRecorder'
 
 export interface AudioRecorderProps {
-  onRecordingComplete: (recording: Recording) => void
+  onRecordingComplete: (recording: Recording) => void | Promise<void>
+  disabled?: boolean
 }
 
-export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
+export function AudioRecorder({
+  onRecordingComplete,
+  disabled = false,
+}: AudioRecorderProps) {
   const { isRecording, duration, error, startRecording, stopRecording } =
     useAudioRecorder()
   const [hasPermissionError, setHasPermissionError] = useState(false)
@@ -29,8 +33,7 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
       const recording = await stopRecording()
       if (recording) {
         setHasPermissionError(false)
-        onRecordingComplete(recording)
-        console.log('✅ Enregistrement complété:', recording)
+        await onRecordingComplete(recording)
       }
     } else {
       // Démarrer l'enregistrement
@@ -49,7 +52,7 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
       {/* Bouton d'enregistrement */}
       <button
         onClick={handleToggleRecording}
-        disabled={hasPermissionError}
+        disabled={hasPermissionError || disabled}
         className={`
           relative w-24 h-24 rounded-full flex items-center justify-center
           font-bold text-lg transition-all duration-200
@@ -58,7 +61,7 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
               ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/50'
               : 'bg-success hover:bg-blue-400 text-primary-dark shadow-lg shadow-success/50'
           }
-          ${hasPermissionError ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}
+          ${hasPermissionError || disabled ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}
         `}
         title={isRecording ? 'Arrêter l\'enregistrement' : 'Démarrer l\'enregistrement'}
       >
